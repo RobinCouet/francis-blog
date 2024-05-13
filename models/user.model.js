@@ -1,14 +1,17 @@
 // Je recup ma connexion dans la variable sequilize
 // et mes types de champs SQL dans DataTypes
-export default (sequelize, DataTypes) => {
-
-    sequelize.define(
+export default (connection, DataTypes) => {
+    connection.define(
         'User',
         {
             // Model attributes are defined here
             firstName: {
                 type: DataTypes.STRING,
                 allowNull: false,
+            },
+            picture: {
+                type: DataTypes.STRING,
+                allowNull: false
             },
             email: {
                 type: DataTypes.STRING,
