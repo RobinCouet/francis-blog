@@ -46,4 +46,3 @@ router.get('/:id/avis', getReview)
 
 // Exportation du router
 export default router;
-

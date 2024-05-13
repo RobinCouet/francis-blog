@@ -5,7 +5,6 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 
 // ROUTES
-// import routerUser from './routes/router.user.js'
 import routerMongoUser from './routes/user.js'
 import routerArticle from './routes/article.js'
 import routerAvis from './routes/avis.js'
@@ -27,7 +26,6 @@ app.use(cookieParser())
 app.use(cors())
 
 // MIDDLEWARE TO ROUTE
-// app.use("/api/user", routerUser)
 app.use("/api/mongo/user", routerMongoUser)
 app.use("/api/article", routerArticle)
 app.use("/api/avis", routerAvis)
