@@ -2,21 +2,13 @@
 // et mes types de champs SQL dans DataTypes
 export default (connection, DataTypes) => {
     connection.define(
-        'Avis',
+        'ArticlePhoto',
         {
             // Model attributes are defined here
-            comment: {
-                type: DataTypes.TEXT,
+            picture: {
+                type: DataTypes.STRING,
                 allowNull: false,
             },
-            rating: {
-                type: DataTypes.INTEGER,
-                allowNull: false
-            },
-            date: {
-                type: DataTypes.DATE,
-                defaultValue: DataTypes.NOW,
-            }
         },
         { timestamps: true }
     );

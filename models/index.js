@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import userModel from './user.model.js'
 import articleModel from "./article.model.js";
+import avisModel from "./avis.model.js";
 
 // Nouvelle connexion à la DB
 const connection = new Sequelize(
@@ -22,16 +23,27 @@ try {
 
 userModel(connection, Sequelize);
 articleModel(connection, Sequelize);
+avisModel(connection, Sequelize);
 
 const {
     User,
-    Article
+    Article,
+    Avis
 } = connection.models;
 
-User.hasMany(Article);
+// has many permet de préciser qu'un utilisateur peut avoir plusieurs articles
+// Cela va permettre de recuperer tous les articles d'un user en faisant User.articles
+User.hasMany(Article, { as: "articles" });
+// belongsTo va permettre de créer le lien entre Article et User
+// Dans Article, il va rajouter la colonne UserId
 Article.belongsTo(User);
 
+Article.hasMany(Avis, { as: "avis" });
+Avis.belongsTo(Article)
 
-await connection.sync({ alter: true })
+User.hasMany(Avis, { as: "avis" });
+Avis.belongsTo(User);
+
+await connection.sync()
 
 console.log('Synchro OK');
