@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
-import ModelUser from "../models/user.model.js";
+import { User } from "../models/index.js";
 import { env } from "../config.js";
 import bcrypt from "bcrypt";
 
 const login = async (req, res) => {
     try {
         // Recherche l'user dans la base de données par son email
-        const user = await ModelUser.findOne({ email: req.body.email });
+        const user = await User.findOne({ email: req.body.email });
         // Si l'user n'est pas trouvé, renvoie une erreur 404
         if (!user) return res.status(404).json("User not found !");
 
@@ -61,7 +61,7 @@ const login = async (req, res) => {
     }
 }
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
     // Début du bloc try pour la gestion des erreurs
     try {
         // Hashage du mot de passe avec bcrypt,
@@ -70,7 +70,7 @@ const register = async (req, res) => {
 
         // Création d'un nouvel utilisateur dans la base de données
         // avec les informations reçues et le mot de passe haché
-        await ModelUser.create({
+        await User.create({
             // '...req.body' est une syntaxe de
             // décomposition (spread syntax).
             // Elle permet de créer une copie
@@ -87,7 +87,7 @@ const register = async (req, res) => {
     } catch (error) {
         // Si une erreur se produit, passez-la au prochain
         // middleware pour la gestion des erreurs
-        console.log(e);
+        console.log(error);
         next(error);
     }
 }
@@ -95,7 +95,7 @@ const register = async (req, res) => {
 const getAll = async (req, res) => {
     try {
         // Utilise la méthode find de Mongoose pour obtenir tous les utilisateurs dans la base de données
-        const users = await ModelUser.find();
+        const users = await User.find();
         // Répond avec le statut 200 (OK) et le tableau des utilisateurs
         res.status(200).json(users);
     } catch (error) {
@@ -109,7 +109,7 @@ const getById = async (req, res) => {
         // Récupère l'ID de l'utilisateur depuis les paramètres de la requête
         const id = req.params.id;
         // Utilise la méthode findById de Mongoose pour obtenir l'utilisateur avec l'ID spécifié
-        const user = await ModelUser.findById(id);
+        const user = await User.findById(id);
         // Répond avec le statut 200 (OK) et l'utilisateur
         res.status(200).json(user);
     } catch (error) {
@@ -122,7 +122,7 @@ const updateById = async (req, res) => {
     try {
         // Utilise la méthode findByIdAndUpdate de Mongoose pour mettre à jour l'utilisateur avec l'ID spécifié
         // L'option { new: true } renvoie la version mise à jour de l'utilisateur
-        const updateUser = await ModelUser.findByIdAndUpdate(
+        const updateUser = await User.findByIdAndUpdate(
             req.params.id,
             req.body,
             { new: true }
@@ -143,7 +143,7 @@ const updateById = async (req, res) => {
 const deleteById = async (req, res) => {
     try {
         // Utilise la méthode findByIdAndDelete de Mongoose pour supprimer l'utilisateur avec l'ID spécifié
-        const userDeleted = await ModelUser.findByIdAndDelete(req.params.id);
+        const userDeleted = await User.findByIdAndDelete(req.params.id);
         // Si l'utilisateur n'est pas trouvé, renvoie le statut 404 (Non trouvé) et un message d'erreur
         if (!userDeleted) return res.status(404).json("User not found !");
         // Si tout se passe bien, renvoie le statut 200 (OK) et un message de confirmation

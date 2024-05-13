@@ -50,7 +50,7 @@ Avis.belongsTo(User);
 Article.hasMany(ArticlePhoto, { as: "photos" })
 ArticlePhoto.belongsTo(Article);
 
-await connection.sync({ alter: true })
+await connection.sync()
 
 console.log('Synchro OK');
 
