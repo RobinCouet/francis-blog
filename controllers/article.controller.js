@@ -1,4 +1,4 @@
-import Article from '../models/article.model.js';
+import { Article } from '../models/index.js';
 
 export const add = async (req, res) => {
     try {
@@ -15,7 +15,7 @@ export const add = async (req, res) => {
 export const getAll = async (req, res) => {
     try {
         // On récupère tous les articles
-        const articles = await Article.find()
+        const articles = await Article.findAll()
         // On renvoie les articles avec un statut 200
         res.status(200).json(articles)
     } catch (err) {
@@ -28,7 +28,7 @@ export const getById = async (req, res) => {
     try {
         const id = req.params.id;
         // On récupère l'article par son id
-        const article = await Article.findById(id)
+        const article = await Article.findByPk(id)
         // On renvoie l'article avec un statut 200
         res.status(200).json(article)
     } catch (err) {
@@ -40,7 +40,7 @@ export const getById = async (req, res) => {
 export const updateById = async (req, res) => {
     try {
         // On récupère l'article par son id
-        const getArticle = await Article.findById(req.params.id)
+        const getArticle = await Article.findByPk(req.params.id)
         // On vérifie que l'utilisateur qui fait la requête est bien l'utilisateur qui a créé l'article
         if (getArticle.user.toString() === req.user.id) {
             // On met à jour l'article avec les nouvelles informations reçues dans le corps de la requête
