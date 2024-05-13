@@ -3,12 +3,12 @@ import mongooseUniqueValidator from "mongoose-unique-validator";
 
 const userSchema = mongoose.Schema(
   {
-    firstname: { type: String, require: true }, 
-    picture: { type: String, require: true }, 
-    email: { type: String, require: true, unique: true }, 
-    password: { type: String, require: true } 
+    firstname: { type: String, require: true },
+    picture: { type: String, require: true },
+    email: { type: String, require: true, unique: true },
+    password: { type: String, require: true }
   },
-  {timestamps: {createdAt: true}}
+  { timestamps: { createdAt: true } }
 )
 userSchema.plugin(mongooseUniqueValidator)
 
