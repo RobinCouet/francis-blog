@@ -1,6 +1,6 @@
 import Article from '../models/article.model.js';
 
-const add = async (req, res) => {
+export const add = async (req, res) => {
     try {
         // On crée un nouvel article avec les informations reçues dans le corps de la requête
         const article = await Article.create(req.body)
@@ -12,7 +12,7 @@ const add = async (req, res) => {
     }
 }
 
-const getAll = async (req, res) => {
+export const getAll = async (req, res) => {
     try {
         // On récupère tous les articles
         const articles = await Article.find()
@@ -24,7 +24,7 @@ const getAll = async (req, res) => {
     }
 }
 
-const getById = async (req, res) => {
+export const getById = async (req, res) => {
     try {
         const id = req.params.id;
         // On récupère l'article par son id
@@ -37,7 +37,7 @@ const getById = async (req, res) => {
     }
 }
 
-const updateById = async (req, res) => {
+export const updateById = async (req, res) => {
     try {
         // On récupère l'article par son id
         const getArticle = await Article.findById(req.params.id)
@@ -57,7 +57,7 @@ const updateById = async (req, res) => {
     }
 }
 
-const deleteById = async (req, res) => {
+export const deleteById = async (req, res) => {
     try {
         // On récupère l'article par son id
         const getArticle = await Article.findById(req.params.id)
@@ -77,7 +77,7 @@ const deleteById = async (req, res) => {
     }
 }
 
-const getByAsc = async (req, res) => {
+export const getByAsc = async (req, res) => {
     try {
         // On récupère tous les articles triés par prix croissant
         const articles = await Article.find().sort('price')
@@ -89,7 +89,7 @@ const getByAsc = async (req, res) => {
     }
 }
 
-const getByDesc = async (req, res) => {
+export const getByDesc = async (req, res) => {
     try {
         // On récupère tous les articles triés par prix décroissant
         const articles = await Article.find().sort('-price')
@@ -101,7 +101,7 @@ const getByDesc = async (req, res) => {
     }
 }
 
-const getByUser = async (req, res) => {
+export const getByUser = async (req, res) => {
     try {
         // On récupère tous les articles de l'utilisateur qui fait la requête
         const articles = await Article.find({ user: req.user.id })
@@ -113,7 +113,7 @@ const getByUser = async (req, res) => {
     }
 }
 
-const getReview = async (req, res) => {
+export const getReview = async (req, res) => {
     try {
         // On récupère tous les avis de l'article par son id
         // "populate" est utilisé pour créer une sorte de jointure entre les collections de données MongoDB
@@ -124,16 +124,4 @@ const getReview = async (req, res) => {
         // En cas d'erreur, on renvoie un statut 500 avec le message d'erreur
         res.status(500).json(error.message)
     }
-}
-
-export {
-    add,
-    getAll,
-    getById,
-    updateById,
-    deleteById,
-    getByAsc,
-    getByDesc,
-    getByUser,
-    getReview
 }
