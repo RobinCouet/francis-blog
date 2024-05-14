@@ -31,7 +31,7 @@ const login = async (req, res) => {
         const token = jwt.sign(
             // Le premier argument est la charge utile du token.
             // Ici, nous incluons l'ID de l'utilisateur
-            { id: user._id },
+            { id: user.id },
             // Le deuxième argument est la clé secrète,
             // qui est utilisée pour signer le token.
             // Nous la récupérons à partir

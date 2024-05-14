@@ -8,7 +8,7 @@ import './models/index.js'
 
 // // ROUTES
 import routerMongoUser from './routes/user.js'
-// import routerArticle from './routes/article.js'
+import routerArticle from './routes/article.js'
 // import routerAvis from './routes/avis.js'
 
 const app = express()
@@ -24,7 +24,7 @@ app.use(cors())
 
 // MIDDLEWARE TO ROUTE
 app.use("/api/mongo/user", routerMongoUser)
-// app.use("/api/article", routerArticle)
+app.use("/api/article", routerArticle)
 // app.use("/api/avis", routerAvis)
 
 // LISTEN
