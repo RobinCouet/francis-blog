@@ -6,7 +6,10 @@ import bcrypt from "bcrypt";
 const login = async (req, res) => {
     try {
         // Recherche l'user dans la base de données par son email
-        const user = await User.findOne({ email: req.body.email });
+        const user = await User.findOne({
+            where:
+                { email: req.body.email }
+        });
         // Si l'user n'est pas trouvé, renvoie une erreur 404
         if (!user) return res.status(404).json("User not found !");
 
@@ -41,21 +44,11 @@ const login = async (req, res) => {
             { expiresIn: "24h" }
         );
 
-        // Supprime le mot de passe de l'utilisateur
-        // pour des raisons de sécurité.
-        // Ce code utilise la destructuration pour extraire
-        // la propriété password de user._doc.
-        // Toutes les autres propriétés sont regroupées
-        // dans un nouvel objet appelé others.
-        // C’est une pratique courante lorsque
-        // vous voulez exclure certaines propriétés d’un objet.     
-        const { password, ...other } = user._doc
-
         // envoi le jeton (token) JWT sous forme de cookie HTTPOnly
         res
             .cookie("access_token", token, { httpOnly: true })
             .status(200)
-            .json(other);
+            .json(user);
     } catch (e) {
         console.log(e);
     }
@@ -95,7 +88,7 @@ const register = async (req, res, next) => {
 const getAll = async (req, res) => {
     try {
         // Utilise la méthode find de Mongoose pour obtenir tous les utilisateurs dans la base de données
-        const users = await User.find();
+        const users = await User.findAll();
         // Répond avec le statut 200 (OK) et le tableau des utilisateurs
         res.status(200).json(users);
     } catch (error) {
@@ -108,8 +101,8 @@ const getById = async (req, res) => {
     try {
         // Récupère l'ID de l'utilisateur depuis les paramètres de la requête
         const id = req.params.id;
-        // Utilise la méthode findById de Mongoose pour obtenir l'utilisateur avec l'ID spécifié
-        const user = await User.findById(id);
+        // Utilise la méthode findByPk de Sequelize pour obtenir l'utilisateur avec l'ID spécifié
+        const user = await User.findByPk(id);
         // Répond avec le statut 200 (OK) et l'utilisateur
         res.status(200).json(user);
     } catch (error) {
@@ -120,19 +113,19 @@ const getById = async (req, res) => {
 
 const updateById = async (req, res) => {
     try {
-        // Utilise la méthode findByIdAndUpdate de Mongoose pour mettre à jour l'utilisateur avec l'ID spécifié
-        // L'option { new: true } renvoie la version mise à jour de l'utilisateur
-        const updateUser = await User.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true }
+        // Je récupère l'utilisateur avec son id (findByPk)
+        const user = await User.findByPk(req.params.id);
+
+        // Puis je met à jour cet utilisateur avec update
+        await user.update(
+            req.body
         );
         // Si l'utilisateur n'est pas trouvé, renvoie le statut 404 (Non trouvé) et un message d'erreur
-        if (!updateUser) return res.status(404).json("User not found !");
+        if (!user) return res.status(404).json("User not found !");
         // Si tout se passe bien, renvoie le statut 200 (OK), un message de confirmation et l'utilisateur mis à jour
         res.status(200).json({
             message: "user updated",
-            updateUser,
+            user,
         });
     } catch (error) {
         // Log l'erreur si quelque chose se passe mal
@@ -142,8 +135,8 @@ const updateById = async (req, res) => {
 
 const deleteById = async (req, res) => {
     try {
-        // Utilise la méthode findByIdAndDelete de Mongoose pour supprimer l'utilisateur avec l'ID spécifié
-        const userDeleted = await User.findByIdAndDelete(req.params.id);
+        // Utilise la méthode destroy de Serquelize pour supprimer l'utilisateur avec l'ID spécifié
+        const userDeleted = await User.destroy({ where: { id: req.params.id } });
         // Si l'utilisateur n'est pas trouvé, renvoie le statut 404 (Non trouvé) et un message d'erreur
         if (!userDeleted) return res.status(404).json("User not found !");
         // Si tout se passe bien, renvoie le statut 200 (OK) et un message de confirmation
