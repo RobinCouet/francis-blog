@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import userModel from './user.model.js'
 import articleModel from "./article.model.js";
-import avisModel from "./avis.model.js";
+import reviewModel from "./review.model.js";
 import articlePhotoModel from "./articlePhoto.model.js";
 
 // Nouvelle connexion à la DB
@@ -24,13 +24,13 @@ try {
 
 userModel(connection, Sequelize);
 articleModel(connection, Sequelize);
-avisModel(connection, Sequelize);
+reviewModel(connection, Sequelize);
 articlePhotoModel(connection, Sequelize);
 
 const {
     User,
     Article,
-    Avis,
+    Review,
     ArticlePhoto
 } = connection.models;
 
@@ -41,11 +41,11 @@ User.hasMany(Article, { as: "articles" });
 // Dans Article, il va rajouter la colonne UserId
 Article.belongsTo(User);
 
-Article.hasMany(Avis, { as: "avis" });
-Avis.belongsTo(Article)
+Article.hasMany(Review, { as: "reviews" });
+Review.belongsTo(Article)
 
-User.hasMany(Avis, { as: "avis" });
-Avis.belongsTo(User);
+User.hasMany(Review, { as: "reviews" });
+Review.belongsTo(User);
 
 Article.hasMany(ArticlePhoto, { as: "photos" })
 ArticlePhoto.belongsTo(Article);
@@ -57,6 +57,6 @@ console.log('Synchro OK');
 export {
     User,
     Article,
-    Avis,
+    Review,
     ArticlePhoto
 }

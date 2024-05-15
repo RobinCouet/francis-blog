@@ -142,9 +142,9 @@ export const getReview = async (req, res) => {
     try {
         // On récupère tous les avis de l'article par son id
         // "populate" est utilisé pour créer une sorte de jointure entre les collections de données MongoDB
-        const article = await Article.findById(req.params.id).populate('avis')
+        const article = await Article.findByPk(req.params.id, { include: "reviews" })
         // On renvoie les avis avec un statut 200
-        res.status(200).json(article.avis)
+        res.status(200).json(article.reviews)
     } catch (error) {
         // En cas d'erreur, on renvoie un statut 500 avec le message d'erreur
         res.status(500).json(error.message)

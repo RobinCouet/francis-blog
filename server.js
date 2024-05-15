@@ -9,7 +9,7 @@ import './models/index.js'
 // // ROUTES
 import routerUser from './routes/user.js'
 import routerArticle from './routes/article.js'
-// import routerAvis from './routes/avis.js'
+import routerAvis from './routes/avis.js'
 
 const app = express()
 
@@ -25,7 +25,7 @@ app.use(cors())
 // MIDDLEWARE TO ROUTE
 app.use("/api/user", routerUser)
 app.use("/api/article", routerArticle)
-// app.use("/api/avis", routerAvis)
+app.use("/api/avis", routerAvis)
 
 // LISTEN
 app.listen(PORT, () => {

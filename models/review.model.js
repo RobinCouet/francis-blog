@@ -2,7 +2,7 @@
 // et mes types de champs SQL dans DataTypes
 export default (connection, DataTypes) => {
     connection.define(
-        'Avis',
+        'Review',
         {
             // Model attributes are defined here
             comment: {
